@@ -20,7 +20,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
+          aws-region: us-east-1
 
       - name: Login to Amazon ECR
         id: ecr-login
@@ -34,35 +34,35 @@ jobs:
         with:
           context: ./services/user-service
           push: true
-          tags: ${{ env.ECR_REGISTRY }}/user-service:latest
+          tags: 050059836427.dkr.ecr.us-east-1.amazonaws.com/user-service
 
       - name: Build and push job-service image
         uses: docker/build-push-action@v5
         with:
           context: ./services/job-service
           push: true
-          tags: ${{ env.ECR_REGISTRY }}/job-service:latest
+          tags: 050059836427.dkr.ecr.us-east-1.amazonaws.com/job-service
 
       - name: Build and push application-service image
         uses: docker/build-push-action@v5
         with:
           context: ./services/application-service
           push: true
-          tags: ${{ env.ECR_REGISTRY }}/application-service:latest
+          tags: 050059836427.dkr.ecr.us-east-1.amazonaws.com/application-service
 
       - name: Build and push resume-parser-service image
         uses: docker/build-push-action@v5
         with:
           context: ./services/resume-parser-service
           push: true
-          tags: ${{ env.ECR_REGISTRY }}/resume-parser-service:latest
+          tags: 050059836427.dkr.ecr.us-east-1.amazonaws.com/resume-parser-service
 
       - name: Build and push frontend image
         uses: docker/build-push-action@v5
         with:
           context: ./frontend
           push: true
-          tags: ${{ env.ECR_REGISTRY }}/gigorbit-frontend:latest
+          tags: 050059836427.dkr.ecr.us-east-1.amazonaws.com/gigorbit-frontend
 
       - name: Update Kubernetes manifests
         run: |
