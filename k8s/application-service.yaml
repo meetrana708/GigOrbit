@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: application-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: application-service
+  template:
+    metadata:
+      labels:
+        app: application-service
+    spec:
+      containers:
+        - name: application-service
+          image: REPLACE_WITH_IMAGE/application-service:latest
+          env:
+            - name: APPLICATION_DB
+              value: "/data/applications.db"
+          volumeMounts:
+            - name: application-data
+              mountPath: /data
+          ports:
+            - containerPort: 5003
+      volumes:
+        - name: application-data
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: application-service
+spec:
+  selector:
+    app: application-service
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5003

@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-service
+  template:
+    metadata:
+      labels:
+        app: user-service
+    spec:
+      containers:
+        - name: user-service
+          image: REPLACE_WITH_IMAGE/user-service:latest
+          env:
+            - name: USER_DB
+              value: "/data/users.db"
+          volumeMounts:
+            - name: user-data
+              mountPath: /data
+          ports:
+            - containerPort: 5001
+      volumes:
+        - name: user-data
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service
+spec:
+  selector:
+    app: user-service
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5001

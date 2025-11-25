@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: resume-parser-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: resume-parser-service
+  template:
+    metadata:
+      labels:
+        app: resume-parser-service
+    spec:
+      containers:
+        - name: resume-parser-service
+          image: REPLACE_WITH_IMAGE/resume-parser-service:latest
+          ports:
+            - containerPort: 5004
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: resume-parser-service
+spec:
+  selector:
+    app: resume-parser-service
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5004

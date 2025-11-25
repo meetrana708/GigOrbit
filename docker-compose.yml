@@ -1,0 +1,54 @@
+version: "3.9"
+
+services:
+  user-service:
+    build: ./services/user-service
+    container_name: user-service
+    volumes:
+      - user_data:/data
+    environment:
+      - USER_DB=/data/users.db
+    ports:
+      - "5001:5001"
+
+  job-service:
+    build: ./services/job-service
+    container_name: job-service
+    volumes:
+      - job_data:/data
+    environment:
+      - JOB_DB=/data/jobs.db
+    ports:
+      - "5002:5002"
+
+  application-service:
+    build: ./services/application-service
+    container_name: application-service
+    volumes:
+      - application_data:/data
+    environment:
+      - APPLICATION_DB=/data/applications.db
+    ports:
+      - "5003:5003"
+
+  resume-parser-service:
+    build: ./services/resume-parser-service
+    container_name: resume-parser-service
+    ports:
+      - "5004:5004"
+
+  frontend:
+    build: ./frontend
+    container_name: gigorbit-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - user-service
+      - job-service
+      - application-service
+      - resume-parser-service
+
+volumes:
+  user_data:
+  job_data:
+  application_data:
